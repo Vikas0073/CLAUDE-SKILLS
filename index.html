@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vixit 3D — The Style Library & AI Motion Cloner</title>
+  <meta name="description" content="62 code-drawn motion graphics styles, Mobile YouTube-to-Claude prompt builder, and AI style cloner by Vixit 3D." />
+  <meta property="og:title" content="Vixit 3D — The Style Library & AI Motion Cloner" />
+  <meta property="og:description" content="Copy 62 animated motion-graphics styles with sound effects for Claude Mobile & Desktop." />
+  <meta property="og:type" content="website" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +23,7 @@
       background-color: var(--bg-primary);
       color: #f4f4f5;
       overflow-x: hidden;
-      padding-bottom: 76px; /* Space for mobile sticky bar */
+      padding-bottom: 76px;
     }
     @media (min-width: 768px) {
       body { padding-bottom: 0; }
@@ -42,11 +46,9 @@
       border-color: rgba(251, 191, 36, 0.45);
     }
 
-    /* Hide scrollbar for clean horizontal mobile pill scrolling */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    /* Lightweight CSS animations */
     @keyframes floatSlow {
       0%, 100% { transform: translateY(0px) rotate(0deg); }
       50% { transform: translateY(-5px) rotate(1.5deg); }
@@ -81,7 +83,6 @@
   <!-- Sticky Top Navbar -->
   <header class="sticky top-0 z-40 glass border-b border-zinc-800/80">
     <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-      <!-- Brand Logo -->
       <a href="#" class="flex items-center gap-2.5 min-h-[48px]">
         <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-black font-black text-sm shadow-md">
           V3
@@ -92,7 +93,6 @@
         </div>
       </a>
 
-      <!-- Desktop Navigation -->
       <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-zinc-400">
         <a href="#styles" class="hover:text-white transition">62 Styles</a>
         <a href="#youtube-mobile" class="text-emerald-400 hover:text-emerald-300 transition">YouTube → Claude</a>
@@ -101,8 +101,10 @@
         <a href="#contact" class="hover:text-white transition">Contact</a>
       </nav>
 
-      <!-- Header CTA -->
       <div class="flex items-center gap-2">
+        <a href="https://www.youtube.com/@VixitGaming007" target="_blank" rel="noopener noreferrer" class="hidden lg:flex bg-zinc-900 border border-zinc-800 text-red-400 text-xs font-bold px-3.5 py-2.5 rounded-full hover:border-red-400/60 transition min-h-[40px] items-center gap-1.5">
+          <span>▶ YouTube</span>
+        </a>
         <a href="#youtube-mobile" class="bg-zinc-900 border border-zinc-700 text-emerald-400 text-xs font-bold px-3.5 py-2.5 rounded-full hover:border-emerald-400 transition min-h-[40px] flex items-center">
           ▶ YouTube Mode
         </a>
@@ -113,29 +115,25 @@
     </div>
   </header>
 
-  <!-- Simple, Clean Hero Section -->
+  <!-- Hero Section -->
   <section class="relative overflow-hidden pt-12 pb-12 sm:pt-20 sm:pb-16 px-4">
     <div class="absolute top-6 left-1/2 -translate-x-1/2 w-[500px] h-[240px] bg-amber-500/10 blur-[110px] rounded-full pointer-events-none"></div>
 
     <div class="max-w-4xl mx-auto text-center relative z-10">
-      <!-- Creator Intro Pill -->
       <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900/95 border border-zinc-800 text-xs text-zinc-300 mb-5">
         <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
         <span>By <strong class="text-white">Vixit 3D</strong> · Works on iPhone, Android & Desktop</span>
       </div>
 
-      <!-- Main Headline -->
       <h1 class="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.1] mb-4">
         Motion graphics you can copy.<br />
         <span class="text-zinc-400">Right from your phone.</span>
       </h1>
 
-      <!-- Simple 1-Sentence Explanation -->
       <p class="max-w-xl mx-auto text-zinc-400 text-sm sm:text-base leading-relaxed mb-7">
         Pick any of the 62 code-drawn animation styles, paste a YouTube link or your topic, and copy the prompt into the <strong class="text-zinc-200">Claude mobile app</strong>. Sound effects included.
       </p>
 
-      <!-- Thumb-Friendly Primary Buttons -->
       <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 max-w-md sm:max-w-none mx-auto">
         <a href="#styles" class="bg-amber-400 text-black font-extrabold px-6 py-3.5 rounded-2xl hover:bg-amber-300 transition text-sm sm:text-base min-h-[50px] flex items-center justify-center shadow-lg shadow-amber-400/10">
           Browse 62 Styles ↓
@@ -165,13 +163,11 @@
       </p>
 
       <div class="space-y-4">
-        <!-- Step 1: Choose Style -->
         <div>
           <label for="ytStyleSelect" class="block text-xs font-bold text-zinc-300 mb-1.5">1. Pick Animation Style</label>
           <select id="ytStyleSelect" onchange="updateYoutubePrompt()" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-white min-h-[48px] focus:outline-none focus:border-emerald-400"></select>
         </div>
 
-        <!-- Step 2: YouTube URL -->
         <div>
           <label for="ytUrlInput" class="block text-xs font-bold text-zinc-300 mb-1.5">2. Paste YouTube Video Link</label>
           <input
@@ -183,7 +179,6 @@
           />
         </div>
 
-        <!-- Step 3: Optional Notes / Transcript -->
         <div>
           <label for="ytNotesInput" class="block text-xs font-bold text-zinc-300 mb-1.5">3. Key points or transcript (optional — helps Claude be 100% accurate)</label>
           <textarea
@@ -195,7 +190,6 @@
           ></textarea>
         </div>
 
-        <!-- Output Prompt Box -->
         <div class="bg-zinc-950 border border-zinc-800 rounded-2xl p-4">
           <div class="flex items-center justify-between gap-2 mb-2">
             <span class="mono text-[11px] text-zinc-400">Mobile-Ready Prompt</span>
@@ -225,7 +219,6 @@
         <p class="text-zinc-400 text-xs sm:text-sm mt-1">Tap any style to customize for Topic, Voiceover, or Mobile YouTube.</p>
       </div>
 
-      <!-- Simple Search Bar -->
       <div class="relative w-full sm:w-64">
         <input
           id="styleSearchInput"
@@ -240,18 +233,13 @@
       </div>
     </div>
 
-    <!-- Single-Row Horizontal Scrollable Category Pills on Mobile -->
-    <div id="filterContainer" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-3 mb-6">
-      <!-- Populated dynamically -->
-    </div>
+    <div id="filterContainer" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-3 mb-6"></div>
 
-    <!-- Empty Search State -->
     <div id="emptyState" class="hidden text-center py-16 glass rounded-3xl">
       <p class="text-zinc-400 text-sm mb-3">No styles matched your search.</p>
       <button onclick="resetFilters()" class="px-5 py-2.5 rounded-xl bg-amber-400 text-black text-xs font-extrabold min-h-[44px]">Reset Filters</button>
     </div>
 
-    <!-- Responsive Style Cards Grid -->
     <div id="stylesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
   </section>
 
@@ -301,7 +289,7 @@
     </div>
   </section>
 
-  <!-- Free Claude Skills Section (Mobile App vs Desktop Tabs) -->
+  <!-- Free Claude Skills Section -->
   <section id="skills" class="max-w-6xl mx-auto px-4 py-12">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
       <div>
@@ -309,7 +297,6 @@
         <h2 class="text-2xl sm:text-3xl font-black mt-1">Vixit 3D Claude Skills</h2>
       </div>
 
-      <!-- Mobile vs Desktop Mode Switcher -->
       <div class="inline-flex bg-zinc-900 p-1 rounded-xl border border-zinc-800 self-start">
         <button id="tabSkillMobile" onclick="switchSkillMode('mobile')" class="px-3.5 py-2 rounded-lg text-xs font-extrabold bg-amber-400 text-black transition">
           📱 Mobile App (No Setup)
@@ -321,7 +308,7 @@
     </div>
 
     <div class="grid md:grid-cols-2 gap-5">
-      <!-- Skill 1: Faceless Shorts -->
+      <!-- Skill 1 -->
       <div class="glass-card rounded-3xl p-6 flex flex-col justify-between">
         <div>
           <div class="flex items-center justify-between gap-2 mb-3">
@@ -335,13 +322,11 @@
             Creates complete narrated faceless Shorts with 3D/kinetic visuals and synced Web Audio sound effects.
           </p>
 
-          <!-- Mobile View -->
           <div id="skill1MobileBox" class="bg-black/60 border border-zinc-800 rounded-2xl p-3.5 mono text-xs text-zinc-300 mb-5">
             <div class="text-emerald-400 mb-1">📱 Mobile App 1-Tap Prompt:</div>
             <div class="text-zinc-300">"Act as the Vixit 3D Faceless Shorts engine. Build a 30s 9:16 Deep Dive 3D short: what happens if you crack your knuckles?"</div>
           </div>
 
-          <!-- Desktop View -->
           <div id="skill1DesktopBox" class="hidden bg-black/60 border border-zinc-800 rounded-2xl p-3.5 mono text-xs text-zinc-300 mb-5 space-y-1">
             <div class="text-zinc-500"># Put folder in ~/.claude/skills/</div>
             <div class="text-emerald-400">$ bash scripts/setup.sh</div>
@@ -359,7 +344,7 @@
         </div>
       </div>
 
-      <!-- Skill 2: AI Video Editor -->
+      <!-- Skill 2 -->
       <div class="glass-card rounded-3xl p-6 flex flex-col justify-between">
         <div>
           <div class="flex items-center justify-between gap-2 mb-3">
@@ -373,13 +358,11 @@
             Generates transparent motion-graphic overlays (Creator Motion, Chalk Talk, Clean Tech) for your talking-head clips.
           </p>
 
-          <!-- Mobile View -->
           <div id="skill2MobileBox" class="bg-black/60 border border-zinc-800 rounded-2xl p-3.5 mono text-xs text-zinc-300 mb-5">
             <div class="text-sky-400 mb-1">📱 Mobile App 1-Tap Prompt:</div>
             <div class="text-zinc-300">"Generate Creator Motion Graphics B-roll & lower-third overlay cards for my video script: [PASTE SCRIPT]"</div>
           </div>
 
-          <!-- Desktop View -->
           <div id="skill2DesktopBox" class="hidden bg-black/60 border border-zinc-800 rounded-2xl p-3.5 mono text-xs text-zinc-300 mb-5 space-y-1">
             <div class="text-zinc-500"># Requires ffmpeg & Python 3.9+</div>
             <div class="text-sky-400">$ claude</div>
@@ -399,7 +382,7 @@
     </div>
   </section>
 
-  <!-- Simple Newsletter & Direct Contact Footer -->
+  <!-- Newsletter & Direct Contact Footer (Connected to Formspree xeagagjy) -->
   <footer id="contact" class="border-t border-zinc-900 bg-zinc-950/80 mt-8 pt-12 pb-12 px-4">
     <div class="max-w-3xl mx-auto text-center">
       <div class="glass rounded-3xl p-6 sm:p-8 mb-10">
@@ -409,9 +392,12 @@
           Free weekly updates by Vixit 3D. Questions or custom motion work? Reach out anytime at <strong class="text-white">nagarvikas456@gmail.com</strong>.
         </p>
 
-        <form onsubmit="handleNewsletterSubmit(event)" class="flex flex-col sm:flex-row gap-2.5 max-w-md mx-auto mb-5">
+        <!-- Formspree Newsletter Subscription -->
+        <form id="newsletterForm" action="https://formspree.io/f/xeagagjy" method="POST" onsubmit="handleFormspreeSubmit(event, 'newsletterForm', 'Subscribed! Welcome to Vixit 3D AI Brief.')" class="flex flex-col sm:flex-row gap-2.5 max-w-md mx-auto mb-6">
+          <input type="hidden" name="form_type" value="Newsletter Subscription" />
           <input
             id="newsletterEmailInput"
+            name="email"
             type="email"
             required
             placeholder="you@example.com"
@@ -422,29 +408,40 @@
           </button>
         </form>
 
-        <!-- Direct Email Action Buttons -->
+        <!-- Clean Quick Contact Form (Formspree) -->
+        <form id="quickContactForm" action="https://formspree.io/f/xeagagjy" method="POST" onsubmit="handleFormspreeSubmit(event, 'quickContactForm', 'Message sent to Vixit 3D!')" class="max-w-md mx-auto mb-6 text-left bg-zinc-950/80 border border-zinc-800/80 rounded-2xl p-4 space-y-3">
+          <input type="hidden" name="form_type" value="Direct Inquiry" />
+          <div class="text-xs font-bold text-zinc-300">Send a quick message to Vixit 3D</div>
+          <input
+            type="email"
+            name="email"
+            required
+            placeholder="Your email address"
+            class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-amber-400"
+          />
+          <textarea
+            name="message"
+            rows="2"
+            required
+            placeholder="Ask about a custom style, YouTube collab, or feedback..."
+            class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-amber-400"
+          ></textarea>
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-zinc-800 hover:bg-amber-400 hover:text-black text-white text-xs font-extrabold transition min-h-[42px]">
+            Send Message →
+          </button>
+        </form>
+
+        <!-- Direct Email & YouTube Action Buttons -->
         <div class="flex flex-wrap items-center justify-center gap-2.5 pt-4 border-t border-zinc-800/80">
           <a href="mailto:nagarvikas456@gmail.com?subject=Vixit%203D%20Inquiry" class="px-4 py-2.5 rounded-xl bg-zinc-900 border border-zinc-700 text-xs font-bold text-white hover:border-amber-400 transition min-h-[42px] flex items-center gap-2">
             <span>✉ Email: nagarvikas456@gmail.com</span>
           </a>
-          <form
-  action="https://formspree.io/f/xeagagjy"
-  method="POST"
->
-  <label>
-    Your email:
-    <input type="email" name="email">
-  </label>
-  <label>
-    Your message:
-    <textarea name="message"></textarea>
-  </label>
-  <!-- your other form fields go here -->
-  <button type="submit">Send</button>
-</form>
           <button onclick="copyText('nagarvikas456@gmail.com', 'Email copied: nagarvikas456@gmail.com')" class="px-4 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs font-semibold text-zinc-300 hover:text-white transition min-h-[42px]">
             Copy Email
           </button>
+          <a href="https://www.youtube.com/@VixitGaming007" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs font-bold text-red-400 hover:border-red-400/60 transition min-h-[42px] flex items-center gap-1.5">
+            <span>▶ YouTube @VixitGaming007</span>
+          </a>
         </div>
       </div>
 
@@ -472,10 +469,9 @@
     </a>
   </nav>
 
-  <!-- Mobile Bottom-Sheet / Desktop Modal for Customizing Any Style Prompt -->
+  <!-- Mobile Bottom-Sheet / Desktop Modal -->
   <div id="promptModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
     <div class="bg-zinc-900 border-t sm:border border-zinc-800 rounded-t-3xl sm:rounded-3xl max-w-xl w-full p-5 sm:p-7 relative shadow-2xl max-h-[90vh] overflow-y-auto">
-      <!-- Mobile Drag Handle Indicator -->
       <div class="w-10 h-1 bg-zinc-700 rounded-full mx-auto mb-4 sm:hidden"></div>
 
       <button onclick="closeModal()" aria-label="Close modal" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-zinc-800 text-zinc-300 hover:text-white flex items-center justify-center text-lg">
@@ -486,7 +482,6 @@
       <h3 id="modalTitle" class="text-xl sm:text-2xl font-black text-white mt-0.5 mb-1.5"></h3>
       <p id="modalDesc" class="text-xs text-zinc-400 mb-4 leading-relaxed"></p>
 
-      <!-- 3-Way Mode Switcher: Standard Topic / With Voiceover / YouTube Mobile -->
       <div class="grid grid-cols-3 gap-1.5 bg-zinc-950 p-1 rounded-xl border border-zinc-800 mb-4">
         <button id="modeTopicBtn" onclick="setModalMode('topic')" class="py-2 px-2 rounded-lg text-[11px] sm:text-xs font-extrabold bg-amber-400 text-black transition">
           Topic
@@ -499,7 +494,6 @@
         </button>
       </div>
 
-      <!-- YouTube Extra URL Input (Visible only in YouTube mode) -->
       <div id="modalYtUrlWrap" class="hidden mb-3">
         <label class="block text-xs font-bold text-emerald-400 mb-1">YouTube Video Link</label>
         <input
@@ -511,7 +505,6 @@
         />
       </div>
 
-      <!-- Topic / Script / Video Notes Input -->
       <div class="mb-4">
         <label id="modalInputLabel" class="block text-xs font-bold text-zinc-300 mb-1">Your topic or key points</label>
         <input
@@ -523,7 +516,6 @@
         />
       </div>
 
-      <!-- Generated Prompt Box -->
       <div class="mb-4">
         <div class="flex justify-between items-center mb-1">
           <span class="mono text-[11px] text-zinc-400">Ready for Claude Mobile & Desktop</span>
@@ -549,7 +541,6 @@
   </div>
 
   <script>
-       // Complete 62-Style Dataset for Vixit 3D
     const stylesData = [
       { id: "01", category: "Kinetic Type", ratio: "16:9", accent: "#fbbf24", bg: "#09090b", title: "Creator Motion Graphics", desc: "High-energy business-creator edit: huge condensed caps slamming in word by word, a yellow serif accent on the one word that matters, highlighter swipes, hand-drawn circles and arrows, tilted mockups, and rolling green counters." },
       { id: "02", category: "Hand-Drawn", ratio: "16:9", accent: "#4ade80", bg: "#14291e", title: "Chalk Talk", desc: "A teacher at a long green slate: grainy chalk strokes that skip over the board's tooth, colored chalk for emphasis, dust falling from the stick as it writes, and a dusty wooden chalk tray." },
@@ -633,9 +624,8 @@
     let currentCategory = "All";
     let searchQuery = "";
     let activeStyle = null;
-    let modalMode = "topic"; // 'topic' | 'vo' | 'youtube'
+    let modalMode = "topic";
 
-    // Toast notification helper
     function showToast(message) {
       const container = document.getElementById("toastContainer");
       const toast = document.createElement("div");
@@ -653,7 +643,6 @@
       }, 2800);
     }
 
-    // Reliable mobile + desktop clipboard copy
     function copyText(text, successMessage = "Copied! Paste into Claude app.") {
       const textarea = document.createElement("textarea");
       textarea.value = text;
@@ -673,7 +662,6 @@
       document.body.removeChild(textarea);
     }
 
-    // Lightweight CSS/SVG animated thumbnail
     function getStylePreviewMarkup(style) {
       const { id, category, accent, bg, title } = style;
       const shortTitle = title.split(" ").slice(0, 2).join(" ").toUpperCase();
@@ -737,7 +725,6 @@
       `;
     }
 
-    // Horizontal Scrollable Category Filter Pills
     function renderFilters() {
       const container = document.getElementById("filterContainer");
       container.innerHTML = "";
@@ -758,7 +745,6 @@
       });
     }
 
-    // Render Style Cards
     function renderStyles() {
       const grid = document.getElementById("stylesGrid");
       const emptyState = document.getElementById("emptyState");
@@ -826,7 +812,6 @@
       renderStyles();
     }
 
-    // Populate Dropdowns (YouTube Mobile Bridge + Clone Section)
     function initDropdowns() {
       const ytSelect = document.getElementById("ytStyleSelect");
       const cloneSelect = document.getElementById("cloneStyleSelect");
@@ -850,7 +835,6 @@
       updateClonePrompt();
     }
 
-    // Mobile YouTube -> Claude Prompt Generator
     function updateYoutubePrompt() {
       const id = document.getElementById("ytStyleSelect").value;
       const style = stylesData.find(s => s.id === id) || stylesData[0];
@@ -882,7 +866,6 @@ Workflow: Show me a test storyboard frame first and wait for my OK before buildi
       setTimeout(() => (btn.textContent = "Copy & Open Claude"), 2400);
     }
 
-    // Clone Section Logic
     function updateClonePrompt() {
       const selectedId = document.getElementById("cloneStyleSelect").value;
       const baseStyle = stylesData.find(s => s.id === selectedId) || stylesData[0];
@@ -916,7 +899,6 @@ Instructions:
       showToast(`Loaded #${styleId} into Style Cloner`);
     }
 
-    // Mobile Bottom Sheet / Modal Logic
     function openModalById(styleId) {
       const style = stylesData.find(s => s.id === styleId);
       if (!style) return;
@@ -1014,7 +996,6 @@ Workflow: Render a test storyboard frame first and wait for my OK before buildin
       quickCloneFromCard(id);
     }
 
-    // Mobile vs Desktop Skill Tabs
     function switchSkillMode(mode) {
       const mBtn = document.getElementById("tabSkillMobile");
       const dBtn = document.getElementById("tabSkillDesktop");
@@ -1040,10 +1021,10 @@ Workflow: Render a test storyboard frame first and wait for my OK before buildin
       }
     }
 
-    // Download Skill Kit Handler
     function triggerSkillDownload(skillName, fileName, size) {
       const readmeContent = `# ${skillName} — Vixit 3D
 Contact: nagarvikas456@gmail.com
+YouTube: https://www.youtube.com/@VixitGaming007
 
 ## Mobile App Usage (No Installation Needed)
 Paste the Mobile Prompt from Vixit 3D directly into the Claude iOS/Android app.
@@ -1064,26 +1045,45 @@ Paste the Mobile Prompt from Vixit 3D directly into the Claude iOS/Android app.
       showToast(`Downloaded ${skillName} (${size}) guide!`);
     }
 
-    // Newsletter Submit
-    function handleNewsletterSubmit(e) {
+    // Formspree AJAX Submit Handler (Newsletter + Direct Contact)
+    async function handleFormspreeSubmit(e, formId, successMsg) {
       e.preventDefault();
-      const email = document.getElementById("newsletterEmailInput").value.trim();
-      if (!email) return;
-      localStorage.setItem("vixit3d_subscribed", email);
-      document.getElementById("newsletterEmailInput").value = "";
-      showToast(`Subscribed ${email} to Vixit 3D's AI Brief!`);
+      const form = document.getElementById(formId);
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending...";
+
+      try {
+        const response = await fetch(form.action, {
+          method: "POST",
+          body: new FormData(form),
+          headers: { Accept: "application/json" }
+        });
+        if (response.ok) {
+          form.reset();
+          showToast(successMsg);
+        } else {
+          showToast("Could not send right now. Please try again.");
+        }
+      } catch (err) {
+        showToast("Network error. Check your connection.");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
     }
 
     document.addEventListener("keydown", e => {
       if (e.key === "Escape") closeModal();
     });
 
-    // Initialize
     renderFilters();
     renderStyles();
     initDropdowns();
   </script>
-   <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "0829e3a5e8c040a890c40fb8266ef49c"}'></script><!-- End Cloudflare Web Analytics -->
 
+  <!-- Cloudflare Web Analytics -->
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "0829e3a5e8c040a890c40fb8266ef49c"}'></script>
 </body>
 </html>
