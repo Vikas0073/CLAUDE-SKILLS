@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vixit 3D — The Style Library & AI Motion Cloner</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b;
+      --bg-card: #121216;
+      --accent: #fbbf24;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-primary);
+      color: #f4f4f5;
+      overflow-x: hidden;
+      padding-bottom: 76px; /* Space for mobile sticky bar */
+    }
+    @media (min-width: 768px) {
+      body { padding-bottom: 0; }
+    }
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .glass {
+      background: rgba(18, 18, 22, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card {
+      background: linear-gradient(180deg, rgba(24, 24, 29, 0.92) 0%, rgba(15, 15, 19, 0.96) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .glass-card:hover {
+      border-color: rgba(251, 191, 36, 0.45);
+    }
+
+    /* Hide scrollbar for clean horizontal mobile pill scrolling */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Lightweight CSS animations */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-5px) rotate(1.5deg); }
+    }
+    @keyframes pulseGrid {
+      0%, 100% { opacity: 0.25; }
+      50% { opacity: 0.55; }
+    }
+    @keyframes scanline {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(200%); }
+    }
+    @keyframes kineticSlam {
+      0%, 100% { transform: scale(1); }
+      20% { transform: scale(1.08); }
+    }
+    .anim-float { animation: floatSlow 4s ease-in-out infinite; }
+    .anim-grid { animation: pulseGrid 3.5s ease-in-out infinite; }
+    .anim-slam { animation: kineticSlam 3s ease-in-out infinite; }
+    .scan-bar { animation: scanline 4s linear infinite; }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #09090b; }
+    ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 9999px; }
+  </style>
+</head>
+<body class="antialiased selection:bg-amber-400 selection:text-black">
+
+  <!-- Toast Notification Banner -->
+  <div id="toastContainer" class="fixed top-20 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:bottom-6 sm:top-auto sm:right-6 z-[100] flex flex-col gap-2 pointer-events-none w-[92vw] sm:w-auto max-w-sm"></div>
+
+  <!-- Sticky Top Navbar -->
+  <header class="sticky top-0 z-40 glass border-b border-zinc-800/80">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-2.5 min-h-[48px]">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-black font-black text-sm shadow-md">
+          V3
+        </div>
+        <div class="flex flex-col">
+          <span class="font-extrabold text-base tracking-tight text-white leading-none">VIXIT 3D</span>
+          <span class="mono text-[10px] text-amber-400/90 tracking-wider mt-0.5">MOBILE + DESKTOP READY</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-zinc-400">
+        <a href="#styles" class="hover:text-white transition">62 Styles</a>
+        <a href="#youtube-mobile" class="text-emerald-400 hover:text-emerald-300 transition">YouTube → Claude</a>
+        <a href="#clone" class="text-amber-400 hover:text-amber-300 transition">Clone a Style</a>
+        <a href="#skills" class="hover:text-white transition">Claude Skills</a>
+        <a href="#contact" class="hover:text-white transition">Contact</a>
+      </nav>
+
+      <!-- Header CTA -->
+      <div class="flex items-center gap-2">
+        <a href="#youtube-mobile" class="bg-zinc-900 border border-zinc-700 text-emerald-400 text-xs font-bold px-3.5 py-2.5 rounded-full hover:border-emerald-400 transition min-h-[40px] flex items-center">
+          ▶ YouTube Mode
+        </a>
+        <a href="#clone" class="hidden sm:flex bg-amber-400 text-black text-xs font-extrabold px-4 py-2.5 rounded-full hover:bg-amber-300 transition min-h-[40px] items-center">
+          Clone Style →
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Simple, Clean Hero Section -->
+  <section class="relative overflow-hidden pt-12 pb-12 sm:pt-20 sm:pb-16 px-4">
+    <div class="absolute top-6 left-1/2 -translate-x-1/2 w-[500px] h-[240px] bg-amber-500/10 blur-[110px] rounded-full pointer-events-none"></div>
+
+    <div class="max-w-4xl mx-auto text-center relative z-10">
+      <!-- Creator Intro Pill -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900/95 border border-zinc-800 text-xs text-zinc-300 mb-5">
+        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        <span>By <strong class="text-white">Vixit 3D</strong> · Works on iPhone, Android & Desktop</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.1] mb-4">
+        Motion graphics you can copy.<br />
+        <span class="text-zinc-400">Right from your phone.</span>
+      </h1>
+
+      <!-- Simple 1-Sentence Explanation -->
+      <p class="max-w-xl mx-auto text-zinc-400 text-sm sm:text-base leading-relaxed mb-7">
+        Pick any of the 62 code-drawn animation styles, paste a YouTube link or your topic, and copy the prompt into the <strong class="text-zinc-200">Claude mobile app</strong>. Sound effects included.
+      </p>
+
+      <!-- Thumb-Friendly Primary Buttons -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 max-w-md sm:max-w-none mx-auto">
+        <a href="#styles" class="bg-amber-400 text-black font-extrabold px-6 py-3.5 rounded-2xl hover:bg-amber-300 transition text-sm sm:text-base min-h-[50px] flex items-center justify-center shadow-lg shadow-amber-400/10">
+          Browse 62 Styles ↓
+        </a>
+        <a href="#youtube-mobile" class="bg-zinc-900 border border-zinc-700 text-white font-bold px-6 py-3.5 rounded-2xl hover:border-emerald-400 transition text-sm sm:text-base min-h-[50px] flex items-center justify-center gap-2">
+          <span class="text-emerald-400">▶</span> Turn YouTube Video into Animation
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dedicated Mobile YouTube -> Claude Bridge Section -->
+  <section id="youtube-mobile" class="max-w-4xl mx-auto px-4 py-8">
+    <div class="glass rounded-3xl p-5 sm:p-8 border border-emerald-500/30 shadow-xl">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <span class="mono text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-400 uppercase tracking-wider">
+          Mobile YouTube → Claude Helper
+        </span>
+        <span class="mono text-[11px] text-zinc-400">No Laptop Needed</span>
+      </div>
+
+      <h2 class="text-2xl sm:text-3xl font-black tracking-tight mb-2">
+        Use YouTube inside Claude on Mobile
+      </h2>
+      <p class="text-zinc-400 text-xs sm:text-sm leading-relaxed mb-6">
+        The Claude mobile app cannot watch raw YouTube videos directly, <strong class="text-zinc-200">but it can search the web for video summaries or animate your pasted notes/transcript</strong>. Paste any YouTube link below to generate a mobile-ready Claude prompt!
+      </p>
+
+      <div class="space-y-4">
+        <!-- Step 1: Choose Style -->
+        <div>
+          <label for="ytStyleSelect" class="block text-xs font-bold text-zinc-300 mb-1.5">1. Pick Animation Style</label>
+          <select id="ytStyleSelect" onchange="updateYoutubePrompt()" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-white min-h-[48px] focus:outline-none focus:border-emerald-400"></select>
+        </div>
+
+        <!-- Step 2: YouTube URL -->
+        <div>
+          <label for="ytUrlInput" class="block text-xs font-bold text-zinc-300 mb-1.5">2. Paste YouTube Video Link</label>
+          <input
+            id="ytUrlInput"
+            type="url"
+            oninput="updateYoutubePrompt()"
+            placeholder="https://youtube.com/watch?v=... or https://youtu.be/..."
+            class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-white placeholder-zinc-600 min-h-[48px] focus:outline-none focus:border-emerald-400"
+          />
+        </div>
+
+        <!-- Step 3: Optional Notes / Transcript -->
+        <div>
+          <label for="ytNotesInput" class="block text-xs font-bold text-zinc-300 mb-1.5">3. Key points or transcript (optional — helps Claude be 100% accurate)</label>
+          <textarea
+            id="ytNotesInput"
+            rows="2"
+            oninput="updateYoutubePrompt()"
+            placeholder="Paste video key takeaways, title, or transcript snippet here..."
+            class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-emerald-400"
+          ></textarea>
+        </div>
+
+        <!-- Output Prompt Box -->
+        <div class="bg-zinc-950 border border-zinc-800 rounded-2xl p-4">
+          <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="mono text-[11px] text-zinc-400">Mobile-Ready Prompt</span>
+            <button id="copyYtBtn" onclick="copyYoutubePrompt()" class="bg-emerald-400 text-black text-xs font-extrabold px-4 py-2 rounded-xl hover:bg-emerald-300 transition min-h-[40px]">
+              Copy & Open Claude
+            </button>
+          </div>
+          <textarea
+            id="ytPromptPreview"
+            rows="5"
+            readonly
+            class="w-full bg-transparent text-xs mono text-zinc-300 leading-relaxed focus:outline-none resize-none"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Style Library Grid Section -->
+  <section id="styles" class="max-w-6xl mx-auto px-4 py-12">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-6 gap-4">
+      <div>
+        <div class="flex items-center gap-2">
+          <h2 class="text-2xl sm:text-3xl font-black tracking-tight">62 Motion Styles</h2>
+          <span id="styleCountBadge" class="mono text-xs px-2.5 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-amber-400">62</span>
+        </div>
+        <p class="text-zinc-400 text-xs sm:text-sm mt-1">Tap any style to customize for Topic, Voiceover, or Mobile YouTube.</p>
+      </div>
+
+      <!-- Simple Search Bar -->
+      <div class="relative w-full sm:w-64">
+        <input
+          id="styleSearchInput"
+          type="text"
+          oninput="handleSearch()"
+          placeholder="Search styles (e.g. 3D, Chalk)..."
+          class="w-full bg-zinc-900 border border-zinc-800 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder-zinc-500 min-h-[46px] focus:outline-none focus:border-amber-400"
+        />
+        <svg class="w-4 h-4 text-zinc-500 absolute left-3 top-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Single-Row Horizontal Scrollable Category Pills on Mobile -->
+    <div id="filterContainer" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-3 mb-6">
+      <!-- Populated dynamically -->
+    </div>
+
+    <!-- Empty Search State -->
+    <div id="emptyState" class="hidden text-center py-16 glass rounded-3xl">
+      <p class="text-zinc-400 text-sm mb-3">No styles matched your search.</p>
+      <button onclick="resetFilters()" class="px-5 py-2.5 rounded-xl bg-amber-400 text-black text-xs font-extrabold min-h-[44px]">Reset Filters</button>
+    </div>
+
+    <!-- Responsive Style Cards Grid -->
+    <div id="stylesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+  </section>
+
+  <!-- Clone Any Style Section (#clone) -->
+  <section id="clone" class="max-w-4xl mx-auto px-4 py-12">
+    <div class="glass rounded-3xl p-5 sm:p-8 border border-amber-400/30 shadow-xl">
+      <span class="mono text-[11px] font-bold px-2.5 py-1 rounded-full bg-amber-400 text-black uppercase tracking-wider">
+        Screenshot Cloner · Free
+      </span>
+      <h2 class="text-2xl sm:text-3xl font-black tracking-tight mt-3 mb-2">Clone any style</h2>
+      <p class="text-zinc-400 text-xs sm:text-sm leading-relaxed mb-6">
+        Take a screenshot of any video style you like on your phone, copy this prompt, paste it into the Claude app, and attach 1–3 screenshots.
+      </p>
+
+      <div class="space-y-4">
+        <div>
+          <label for="cloneStyleSelect" class="block text-xs font-bold text-zinc-300 mb-1.5">1. Pick closest starting style</label>
+          <select id="cloneStyleSelect" onchange="updateClonePrompt()" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-white min-h-[48px] focus:outline-none focus:border-amber-400"></select>
+        </div>
+
+        <div>
+          <label for="cloneTopicInput" class="block text-xs font-bold text-zinc-300 mb-1.5">2. Your topic or YouTube link (optional)</label>
+          <input
+            id="cloneTopicInput"
+            type="text"
+            oninput="updateClonePrompt()"
+            placeholder="e.g., How AI agents work in 30 seconds"
+            class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-white placeholder-zinc-600 min-h-[48px] focus:outline-none focus:border-amber-400"
+          />
+        </div>
+
+        <div class="bg-zinc-950 border border-zinc-800 rounded-2xl p-4">
+          <div class="flex justify-between items-center gap-2 mb-2">
+            <span class="mono text-[11px] text-zinc-400">Clone Prompt</span>
+            <button id="copyCloneBtn" onclick="copyClonePrompt()" class="bg-amber-400 text-black text-xs font-extrabold px-4 py-2 rounded-xl hover:bg-amber-300 transition min-h-[40px]">
+              Copy Clone Prompt
+            </button>
+          </div>
+          <textarea
+            id="clonePromptPreview"
+            rows="5"
+            readonly
+            class="w-full bg-transparent text-xs mono text-zinc-300 leading-relaxed focus:outline-none resize-none"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Free Claude Skills Section (Mobile App vs Desktop Tabs) -->
+  <section id="skills" class="max-w-6xl mx-auto px-4 py-12">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      <div>
+        <span class="mono text-xs text-amber-400 uppercase tracking-wider">Free Automation Kits</span>
+        <h2 class="text-2xl sm:text-3xl font-black mt-1">Vixit 3D Claude Skills</h2>
+      </div>
+
+      <!-- Mobile vs Desktop Mode Switcher -->
+      <div class="inline-flex bg-zinc-900 p-1 rounded-xl border border-zinc-800 self-start">
+        <button id="tabSkillMobile" onclick="switchSkillMode('mobile')" class="px-3.5 py-2 rounded-lg text-xs font-extrabold bg-amber-400 text-black transition">
+          📱 Mobile App (No Setup)
+        </button>
+        <button id="tabSkillDesktop" onclick="switchSkillMode('desktop')" class="px-3.5 py-2 rounded-lg text-xs font-bold text-zinc-400 hover:text-white transition">
+          💻 Desktop (Claude Code)
+        </button>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-5">
+      <!-- Skill 1: Faceless Shorts -->
+      <div class="glass-card rounded-3xl p-6 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between gap-2 mb-3">
+            <span class="mono text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400">
+              Free Skill · 10.4 MB
+            </span>
+            <span class="mono text-xs text-zinc-500">9:16 Shorts</span>
+          </div>
+          <h3 class="text-xl font-extrabold text-white mb-2">Faceless Shorts Skill</h3>
+          <p class="text-zinc-400 text-xs sm:text-sm leading-relaxed mb-4">
+            Creates complete narrated faceless Shorts with 3D/kinetic visuals and synced Web Audio sound effects.
+          </p>
+
+          <!-- Mobile View -->
+          <div id="skill1MobileBox" class="bg-black/60 border border-zinc-800 rounded-2xl p-3.5 mono text-xs text-zinc-300 mb-5">
+            <div class="text-emerald-400 mb-1">📱 Mobile App 1-Tap Prompt:</div>
+            <div class="text-zinc-300">"Act as the Vixit 3D Faceless Shorts engine. Build a 30s 9:16 Deep Dive 3D short: what happens if you crack your knuckles?"</div>
+          </div>
+
+          <!-- Desktop View -->
+          <div id="skill1DesktopBox" class="hidden bg-black/60 border border-zinc-800 rounded-2xl p-3.5 mono text-xs text-zinc-300 mb-5 space-y-1">
+            <div class="text-zinc-500"># Put folder in ~/.claude/skills/</div>
+            <div class="text-emerald-400">$ bash scripts/setup.sh</div>
+            <div class="text-zinc-300">"Make a Deep Dive 3D short: what happens if you crack your knuckles?"</div>
+          </div>
+        </div>
+
+        <div class="flex gap-2">
+          <button onclick="copyText('Act as the Vixit 3D Faceless Shorts engine. Build a 30-second 9:16 vertical animated Short with synthesized Web Audio SFX on the topic: [YOUR TOPIC]', 'Mobile Shorts prompt copied!')" class="flex-1 py-3 rounded-xl bg-amber-400 text-black text-xs font-extrabold hover:bg-amber-300 transition min-h-[46px]">
+            Copy Mobile Prompt
+          </button>
+          <button onclick="triggerSkillDownload('Faceless Shorts Skill', 'faceless-shorts-vixit3d.zip', '10.4 MB')" class="px-4 py-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-bold transition min-h-[46px]">
+            Download Kit
+          </button>
+        </div>
+      </div>
+
+      <!-- Skill 2: AI Video Editor -->
+      <div class="glass-card rounded-3xl p-6 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between gap-2 mb-3">
+            <span class="mono text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-500/10 text-sky-400">
+              Free Skill · 4.6 MB
+            </span>
+            <span class="mono text-xs text-zinc-500">16:9 Overlay</span>
+          </div>
+          <h3 class="text-xl font-extrabold text-white mb-2">AI Video Editor Skill</h3>
+          <p class="text-zinc-400 text-xs sm:text-sm leading-relaxed mb-4">
+            Generates transparent motion-graphic overlays (Creator Motion, Chalk Talk, Clean Tech) for your talking-head clips.
+          </p>
+
+          <!-- Mobile View -->
+          <div id="skill2MobileBox" class="bg-black/60 border border-zinc-800 rounded-2xl p-3.5 mono text-xs text-zinc-300 mb-5">
+            <div class="text-sky-400 mb-1">📱 Mobile App 1-Tap Prompt:</div>
+            <div class="text-zinc-300">"Generate Creator Motion Graphics B-roll & lower-third overlay cards for my video script: [PASTE SCRIPT]"</div>
+          </div>
+
+          <!-- Desktop View -->
+          <div id="skill2DesktopBox" class="hidden bg-black/60 border border-zinc-800 rounded-2xl p-3.5 mono text-xs text-zinc-300 mb-5 space-y-1">
+            <div class="text-zinc-500"># Requires ffmpeg & Python 3.9+</div>
+            <div class="text-sky-400">$ claude</div>
+            <div class="text-zinc-300">"Edit my video /path/to/video.mp4"</div>
+          </div>
+        </div>
+
+        <div class="flex gap-2">
+          <button onclick="copyText('Generate Creator Motion Graphics B-roll overlays and kinetic title cards with Web Audio SFX for this script: [PASTE YOUR SCRIPT]', 'Mobile Editor prompt copied!')" class="flex-1 py-3 rounded-xl bg-amber-400 text-black text-xs font-extrabold hover:bg-amber-300 transition min-h-[46px]">
+            Copy Mobile Prompt
+          </button>
+          <button onclick="triggerSkillDownload('AI Video Editor Skill', 'ai-video-editor-vixit3d.zip', '4.6 MB')" class="px-4 py-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-bold transition min-h-[46px]">
+            Download Kit
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Simple Newsletter & Direct Contact Footer -->
+  <footer id="contact" class="border-t border-zinc-900 bg-zinc-950/80 mt-8 pt-12 pb-12 px-4">
+    <div class="max-w-3xl mx-auto text-center">
+      <div class="glass rounded-3xl p-6 sm:p-8 mb-10">
+        <span class="mono text-xs text-amber-400 uppercase tracking-widest">Vixit 3D · AI Brief</span>
+        <h3 class="text-2xl font-black mt-1 mb-2">Get New Styles & AI Workflows</h3>
+        <p class="text-zinc-400 text-xs sm:text-sm mb-5">
+          Free weekly updates by Vixit 3D. Questions or custom motion work? Reach out anytime at <strong class="text-white">nagarvikas456@gmail.com</strong>.
+        </p>
+
+        <form onsubmit="handleNewsletterSubmit(event)" class="flex flex-col sm:flex-row gap-2.5 max-w-md mx-auto mb-5">
+          <input
+            id="newsletterEmailInput"
+            type="email"
+            required
+            placeholder="you@example.com"
+            class="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-white placeholder-zinc-500 min-h-[48px] focus:outline-none focus:border-amber-400"
+          />
+          <button type="submit" class="bg-amber-400 text-black font-extrabold px-6 py-3 rounded-xl text-sm hover:bg-amber-300 transition min-h-[48px]">
+            Subscribe Free
+          </button>
+        </form>
+
+        <!-- Direct Email Action Buttons -->
+        <div class="flex flex-wrap items-center justify-center gap-2.5 pt-4 border-t border-zinc-800/80">
+          <a href="mailto:nagarvikas456@gmail.com?subject=Vixit%203D%20Inquiry" class="px-4 py-2.5 rounded-xl bg-zinc-900 border border-zinc-700 text-xs font-bold text-white hover:border-amber-400 transition min-h-[42px] flex items-center gap-2">
+            <span>✉ Email: nagarvikas456@gmail.com</span>
+          </a>
+          <button onclick="copyText('nagarvikas456@gmail.com', 'Email copied: nagarvikas456@gmail.com')" class="px-4 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs font-semibold text-zinc-300 hover:text-white transition min-h-[42px]">
+            Copy Email
+          </button>
+        </div>
+      </div>
+
+      <p class="text-xs text-zinc-500">© 2026 Vixit 3D · Built for Mobile & Desktop Creators · nagarvikas456@gmail.com</p>
+    </div>
+  </footer>
+
+  <!-- Mobile Sticky Bottom Thumb Bar -->
+  <nav class="md:hidden fixed bottom-0 inset-x-0 z-40 glass border-t border-zinc-800 px-2 py-1.5 flex items-center justify-around">
+    <a href="#styles" class="flex flex-col items-center justify-center py-1.5 px-3 text-zinc-300 hover:text-amber-400">
+      <span class="text-base leading-none">🎨</span>
+      <span class="text-[10px] font-bold mt-1">62 Styles</span>
+    </a>
+    <a href="#youtube-mobile" class="flex flex-col items-center justify-center py-1.5 px-3 text-emerald-400">
+      <span class="text-base leading-none">▶️</span>
+      <span class="text-[10px] font-bold mt-1">YouTube</span>
+    </a>
+    <a href="#clone" class="flex flex-col items-center justify-center py-1.5 px-3 text-amber-400">
+      <span class="text-base leading-none">✨</span>
+      <span class="text-[10px] font-bold mt-1">Clone</span>
+    </a>
+    <a href="#contact" class="flex flex-col items-center justify-center py-1.5 px-3 text-zinc-300 hover:text-amber-400">
+      <span class="text-base leading-none">✉️</span>
+      <span class="text-[10px] font-bold mt-1">Contact</span>
+    </a>
+  </nav>
+
+  <!-- Mobile Bottom-Sheet / Desktop Modal for Customizing Any Style Prompt -->
+  <div id="promptModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-zinc-900 border-t sm:border border-zinc-800 rounded-t-3xl sm:rounded-3xl max-w-xl w-full p-5 sm:p-7 relative shadow-2xl max-h-[90vh] overflow-y-auto">
+      <!-- Mobile Drag Handle Indicator -->
+      <div class="w-10 h-1 bg-zinc-700 rounded-full mx-auto mb-4 sm:hidden"></div>
+
+      <button onclick="closeModal()" aria-label="Close modal" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-zinc-800 text-zinc-300 hover:text-white flex items-center justify-center text-lg">
+        &times;
+      </button>
+
+      <span id="modalTag" class="mono text-[11px] text-amber-400 font-bold"></span>
+      <h3 id="modalTitle" class="text-xl sm:text-2xl font-black text-white mt-0.5 mb-1.5"></h3>
+      <p id="modalDesc" class="text-xs text-zinc-400 mb-4 leading-relaxed"></p>
+
+      <!-- 3-Way Mode Switcher: Standard Topic / With Voiceover / YouTube Mobile -->
+      <div class="grid grid-cols-3 gap-1.5 bg-zinc-950 p-1 rounded-xl border border-zinc-800 mb-4">
+        <button id="modeTopicBtn" onclick="setModalMode('topic')" class="py-2 px-2 rounded-lg text-[11px] sm:text-xs font-extrabold bg-amber-400 text-black transition">
+          Topic
+        </button>
+        <button id="modeVoBtn" onclick="setModalMode('vo')" class="py-2 px-2 rounded-lg text-[11px] sm:text-xs font-bold text-zinc-400 hover:text-white transition">
+          Voiceover
+        </button>
+        <button id="modeYtBtn" onclick="setModalMode('youtube')" class="py-2 px-2 rounded-lg text-[11px] sm:text-xs font-bold text-emerald-400 hover:text-emerald-300 transition">
+          ▶ YouTube
+        </button>
+      </div>
+
+      <!-- YouTube Extra URL Input (Visible only in YouTube mode) -->
+      <div id="modalYtUrlWrap" class="hidden mb-3">
+        <label class="block text-xs font-bold text-emerald-400 mb-1">YouTube Video Link</label>
+        <input
+          id="modalYtUrl"
+          type="url"
+          oninput="updateModalPrompt()"
+          placeholder="https://youtu.be/..."
+          class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-zinc-600 min-h-[44px] focus:outline-none focus:border-emerald-400"
+        />
+      </div>
+
+      <!-- Topic / Script / Video Notes Input -->
+      <div class="mb-4">
+        <label id="modalInputLabel" class="block text-xs font-bold text-zinc-300 mb-1">Your topic or key points</label>
+        <input
+          id="modalTopic"
+          oninput="updateModalPrompt()"
+          type="text"
+          placeholder="e.g., 3 AI tools every creator needs in 2026..."
+          class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-3 text-sm text-white placeholder-zinc-600 min-h-[46px] focus:outline-none focus:border-amber-400"
+        />
+      </div>
+
+      <!-- Generated Prompt Box -->
+      <div class="mb-4">
+        <div class="flex justify-between items-center mb-1">
+          <span class="mono text-[11px] text-zinc-400">Ready for Claude Mobile & Desktop</span>
+          <span class="mono text-[11px] text-emerald-400">● Audio Included</span>
+        </div>
+        <textarea
+          id="modalPromptText"
+          rows="6"
+          readonly
+          class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 mono text-xs text-zinc-300 leading-relaxed focus:outline-none"
+        ></textarea>
+      </div>
+
+      <div class="flex gap-2.5">
+        <button id="copyModalBtn" onclick="copyModalPrompt()" class="flex-1 py-3.5 rounded-xl bg-amber-400 text-black font-extrabold text-sm hover:bg-amber-300 transition min-h-[48px]">
+          Copy Prompt for Claude
+        </button>
+        <button onclick="useInCloner()" class="px-4 py-3.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold text-xs transition min-h-[48px]">
+          Clone →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Complete 62-Style Dataset for Vixit 3D
+    const stylesData = [
+      { id: "01", category: "Kinetic Type", ratio: "16:9", accent: "#fbbf24", bg: "#09090b", title: "Creator Motion Graphics", desc: "High-energy business-creator edit: huge condensed caps slamming in word by word, a yellow serif accent on the one word that matters, highlighter swipes, hand-drawn circles and arrows, tilted mockups, and rolling green counters." },
+      { id: "02", category: "Hand-Drawn", ratio: "16:9", accent: "#4ade80", bg: "#14291e", title: "Chalk Talk", desc: "A teacher at a long green slate: grainy chalk strokes that skip over the board's tooth, colored chalk for emphasis, dust falling from the stick as it writes, and a dusty wooden chalk tray." },
+      { id: "03", category: "Kinetic Type", ratio: "16:9", accent: "#3b82f6", bg: "#111827", title: "Clean Tech", desc: "Calm, bright product-explainer look: cool off-white with a drifting dot grid, crisp Inter Tight words that rise into place, white UI cards with soft shadows, and one electric blue accent." },
+      { id: "04", category: "Hand-Drawn", ratio: "16:9", accent: "#f97316", bg: "#1c1917", title: "Warm Canvas", desc: "Tactile paper-craft explainer on warm cream stock: subtle paper fibers, charcoal ink outlines with slight hand wobble, terracotta watercolor fills, and stop-motion slide transitions." },
+      { id: "05", category: "Data", ratio: "16:9", accent: "#f43f5e", bg: "#0b1120", title: "Data Story", desc: "Editorial data explainer: deep ink background, warm coral/teal accents, Archivo headlines, mono numbers and labels, charts that draw themselves to scale, and source citations." },
+      { id: "06", category: "Kinetic Type", ratio: "16:9", accent: "#e4e4e7", bg: "#000000", title: "Swiss Grid Typographic", desc: "Strict International Typographic Style: stark black-and-white contrast, razor-thin 1px hairline rules, asymmetric modular columns, and bold grotesk headlines." },
+      { id: "07", category: "Retro", ratio: "16:9", accent: "#22d3ee", bg: "#08121e", title: "CRT Terminal & DOS", desc: "Phosphor green and cyan scanlines on curved glass: blinking block cursors, ASCII progress bars, mechanical keystroke clicks, and boot-sequence logs." },
+      { id: "08", category: "3D", ratio: "9:16", accent: "#fb923c", bg: "#1c1512", title: "Clay Diorama", desc: "Soft clay miniature world on a round base in Three.js: chunky rounded shapes, warm studio light, slow orbiting camera, and cream cards explaining each beat." },
+      { id: "09", category: "3D", ratio: "16:9", accent: "#a855f7", bg: "#130b24", title: "Isometric Glass Cube", desc: "Translucent frosted glass blocks floating in isometric Three.js space: internal neon light refraction, magnetic snapping into place, and floating callout badges." },
+      { id: "10", category: "3D", ratio: "9:16", accent: "#38bdf8", bg: "#091526", title: "Deep Dive 3D Anatomy", desc: "Dark studio scientific visualization in Three.js: cross-section cutaway models, glowing blue-to-amber stress highlights, smooth camera zooms, and crisp annotations." },
+      { id: "11", category: "3D", ratio: "9:16", accent: "#e5e7eb", bg: "#18181b", title: "Exploded View", desc: "Clean studio teardown in Three.js: an object turns slowly on a light floor and floats apart into layers, each part tagged with a numbered mono label." },
+      { id: "12", category: "3D", ratio: "16:9", accent: "#facc15", bg: "#141414", title: "Low-Poly Terrain Flyover", desc: "Faceted geometric landscapes in Three.js: flat-shaded mountain peaks, directional sunlight casting sharp shadows, floating waypoint pins, and drone camera paths." },
+      { id: "13", category: "3D", ratio: "9:16", accent: "#34d399", bg: "#061a14", title: "Voxel World Builder", desc: "Crisp cubic block-by-block construction in Three.js: satisfying pop-in physics, cheerful toy-like lighting, and snappy scale-bounce transitions." },
+      { id: "14", category: "3D", ratio: "9:16", accent: "#22d3ee", bg: "#070b19", title: "Data City", desc: "3D bar chart growing like a city skyline at night in Three.js: navy towers with lit windows, glowing cyan-to-magenta roofs, and values floating above each tower." },
+      { id: "15", category: "3D", ratio: "16:9", accent: "#f87171", bg: "#190c0c", title: "Kinetic 3D Typography", desc: "Heavy extruded 3D monolith letters rotating in dark studio space: metallic specular highlights, dramatic rim lighting, and deep sub-bass impacts." },
+      { id: "16", category: "3D", ratio: "9:16", accent: "#c084fc", bg: "#150c21", title: "Orbital Solar System", desc: "Glowing spheres and concentric orbital rings in Three.js: relative scale comparisons, smooth elliptical paths, trail ribbons, and sci-fi telemetry." },
+      { id: "17", category: "Data", ratio: "16:9", accent: "#10b981", bg: "#071310", title: "Live Market Ticker", desc: "Financial terminal aesthetics: real-time candlestick charts, glowing emerald/crimson delta badges, smooth trend lines, and crisp tabular numerals." },
+      { id: "18", category: "Data", ratio: "9:16", accent: "#fbbf24", bg: "#12100a", title: "Racing Bar Chart", desc: "Competitive horizontal bars overtaking each other over a ticking timeline counter: bold rank badges, spring reordering, and dramatic finale highlight." },
+      { id: "19", category: "Data", ratio: "16:9", accent: "#60a5fa", bg: "#0a111f", title: "Node Network Graph", desc: "Connected constellation of glowing nodes and pulsing data packets: dynamic force-directed links, zoom-to-cluster focus, and dark analytical cards." },
+      { id: "20", category: "Data", ratio: "16:9", accent: "#fb7185", bg: "#160d12", title: "Map Choropleth Zoom", desc: "Vector cartography panning and zooming across regions: color-coded heat intensity, pulsing city beacons, curved flight/trade arcs, and callout boxes." },
+      { id: "21", category: "Data", ratio: "9:16", accent: "#a3e635", bg: "#0e1409", title: "Radial Gauge & Rings", desc: "Concentric fitness-style progress rings filling with smooth spring physics: bold central percentage counters, micro-ticks, and high dark-mode contrast." },
+      { id: "22", category: "Screen and UI", ratio: "16:9", accent: "#6366f1", bg: "#0d0e1c", title: "SaaS Product Showcase", desc: "3D-tilted browser windows floating over a soft mesh gradient: smooth cursor glide, click ripple rings, zoomed-in spotlights, and glass UI panels." },
+      { id: "23", category: "Screen and UI", ratio: "9:16", accent: "#38bdf8", bg: "#0a121a", title: "iMessage & Chat Thread", desc: "Authentic mobile messaging bubbles popping in with typing indicator dots: spring physics, notification dings, image cards, and smooth auto-scroll." },
+      { id: "24", category: "Screen and UI", ratio: "16:9", accent: "#f59e0b", bg: "#14110c", title: "Code Editor Walkthrough", desc: "Syntax-highlighted dark IDE window: line-by-line spotlight dimming, live character typing, terminal output panel sliding up, and diff highlights." },
+      { id: "25", category: "Screen and UI", ratio: "16:9", accent: "#ec4899", bg: "#170b14", title: "AI Prompt-to-Result", desc: "Split-screen AI workflow visualizer: glowing prompt input bar typing a query, shimmer loading state, and crisp output cards fanning out with a chime." },
+      { id: "26", category: "Screen and UI", ratio: "9:16", accent: "#2dd4bf", bg: "#091716", title: "Notification Stack", desc: "Lock-screen frosted glass alert banners stacking and expanding in 3D depth: crisp app icons, timestamps, and subtle haptic-style bounce." },
+      { id: "27", category: "Hand-Drawn", ratio: "16:9", accent: "#facc15", bg: "#18181b", title: "Whiteboard Marker Sketch", desc: "Fast-moving dry-erase marker lines on a bright studio board: squeaky marker foley, red/blue accent circles, stick diagrams, and quick wipe transitions." },
+      { id: "28", category: "Hand-Drawn", ratio: "16:9", accent: "#fb923c", bg: "#1c1613", title: "Blueprint Architectural", desc: "Prussian-blue engineering grid with crisp white drafting lines: compass arcs, dimension arrows, monospace spec stamps, and unfolding fold-lines." },
+      { id: "29", category: "Hand-Drawn", ratio: "9:16", accent: "#f472b6", bg: "#1a1016", title: "Doodle Notebook", desc: "Lined spiral-notebook aesthetic with red margin rule: ballpoint ink sketches, yellow highlighter strokes, sticky-note callouts, and energetic wiggle frames." },
+      { id: "30", category: "Hand-Drawn", ratio: "16:9", accent: "#eab308", bg: "#17140d", title: "Newspaper Cutout Collage", desc: "Vox-style editorial collage: halftone newsprint textures, red grease-pencil underlines, animated paper-tear reveals, and stop-motion jitter." },
+      { id: "31", category: "Retro", ratio: "16:9", accent: "#f43f5e", bg: "#180a10", title: "VHS Tape & 90s Camcorder", desc: "Analog tracking lines, chromatic aberration RGB split, blinking REC indicator, OSD timestamp in VCR font, and warm tape saturation." },
+      { id: "32", category: "Retro", ratio: "16:9", accent: "#e879f9", bg: "#14091c", title: "Synthwave Outrun Grid", desc: "80s retro-futuristic neon horizon: perspective magenta grid floor, striped sunset sphere, chrome italic titles, and analog synth arpeggio hits." },
+      { id: "33", category: "Retro", ratio: "9:16", accent: "#4ade80", bg: "#0b170e", title: "8-Bit Handheld Game", desc: "Crisp pixel-art RPG dialogue boxes, heart health bars, chiptune coin and jump SFX, dithering shadows, and frame-stepped sprite animations." },
+      { id: "34", category: "Retro", ratio: "16:9", accent: "#fbbf24", bg: "#17130c", title: "16mm Film Documentary", desc: "Warm vintage celluloid look: gate weave jitter, sprocket-hole border flashes, dust specks, serif archival lower-thirds, and projector hum." },
+      { id: "35", category: "Retro", ratio: "16:9", accent: "#38bdf8", bg: "#0c141d", title: "Y2K Frosted Plastic", desc: "Early-2000s translucent aqua buttons, glossy pill badges, pixel icons, radial starbursts, and bubbly UI click sounds." },
+      { id: "36", category: "Kinetic Type", ratio: "9:16", accent: "#ef4444", bg: "#140909", title: "Documentary Headline Slam", desc: "Investigative journalism pacing: rapid-fire highlighted quotes from articles, redaction black bars, camera push-ins, and tense heartbeat pulses." },
+      { id: "37", category: "Kinetic Type", ratio: "16:9", accent: "#a78bfa", bg: "#100d1c", title: "Lyric & Quote Flow", desc: "Smooth editorial serif typography floating in deep space: gentle blur-to-sharp focus reveals, gold dust motes, and resonant ambient swells." },
+      { id: "38", category: "Shorts Format", ratio: "9:16", accent: "#fb923c", bg: "#1f1209", title: "Quiz Countdown", desc: "Loud trivia Short on an orange striped background: white question card, four answer pills, draining countdown ring, and green confetti reveal." },
+      { id: "39", category: "Shorts Format", ratio: "9:16", accent: "#ef4444", bg: "#190a0a", title: "This vs. That Split", desc: "High-contrast vertical split-screen showdown: top vs bottom cards slamming in, glowing VS badge in center, score tallies, and winner crown." },
+      { id: "40", category: "Shorts Format", ratio: "9:16", accent: "#fbbf24", bg: "#14120a", title: "Top 5 Countdown Tier", desc: "Numbered listicle format with bold #5 to #1 slam badges: progress bar across the top, crisp visual card per item, and pitch risers." },
+      { id: "41", category: "Shorts Format", ratio: "9:16", accent: "#22c55e", bg: "#09170e", title: "Myth vs. Fact Stamp", desc: "Bold statement card followed by a heavy ink-stamp slam ('MYTH' in crimson or 'FACT' in emerald) with dust burst and screen shake." },
+      { id: "42", category: "Shorts Format", ratio: "9:16", accent: "#38bdf8", bg: "#0a131c", title: "60-Second Timeline", desc: "Vertical scrolling chronological track: glowing year nodes lighting up as the camera descends, compact visual cards, and clock-tick percussion." },
+      { id: "43", category: "Shorts Format", ratio: "9:16", accent: "#f43f5e", bg: "#180b10", title: "Hook-Retention Counter", desc: "Designed for the first 3 seconds: bold curiosity-gap headline, animated retention progress bar, dynamic zoom pulses, and pattern interrupts." },
+      { id: "44", category: "Illustrated", ratio: "16:9", accent: "#fb923c", bg: "#1a120d", title: "Flat Vector Editorial", desc: "Modern geometric vector illustration: rich gradients, clean circular planets/icons, smooth parallax layers, and warm atmospheric glow." },
+      { id: "45", category: "Illustrated", ratio: "16:9", accent: "#2dd4bf", bg: "#0b1716", title: "Isometric Tech Illustration", desc: "Clean vector isometric servers, pipelines, and user avatars: glowing data pulses traveling along angled tracks and pastel-on-dark contrast." },
+      { id: "46", category: "Illustrated", ratio: "9:16", accent: "#facc15", bg: "#17140b", title: "Comic Book Halftone", desc: "Bold black ink panel borders, Ben-Day halftone dots, diagonal action speed-lines, jagged 'POW/BAM' burst callouts, and snappy wipes." },
+      { id: "47", category: "Illustrated", ratio: "16:9", accent: "#818cf8", bg: "#0e101f", title: "Line-Art Morphing", desc: "Continuous single-stroke glowing vector line that morphs seamlessly from one icon/metaphor into the next with smooth easing." },
+      { id: "48", category: "Edit Overlay", ratio: "9:16", accent: "#facc15", bg: "#121215", title: "Punch Captions", desc: "High-retention captions over your talking-head clip: 1–3 words at a time in huge white Anton with black outline, yellow tilted key words, and sticker pops." },
+      { id: "49", category: "Edit Overlay", ratio: "16:9", accent: "#38bdf8", bg: "#0d131a", title: "B-Roll Picture-in-Picture", desc: "Clean floating B-roll card framing for talking-head videos: rounded glass frame, drop shadow, animated chapter pill, and smooth slide-out." },
+      { id: "50", category: "Edit Overlay", ratio: "16:9", accent: "#fbbf24", bg: "#14120d", title: "Editorial Lower Thirds", desc: "Broadcast-grade speaker name and title bars: sleek two-tone slide reveal, accent stripe, crisp kerning, and subtle whoosh sound." },
+      { id: "51", category: "Edit Overlay", ratio: "9:16", accent: "#4ade80", bg: "#0b160f", title: "Side-by-Side Reaction Frame", desc: "Dual-window vertical layout with glowing active-speaker border, top headline hook banner, and clean rounded mask corners." },
+      { id: "52", category: "Edit Overlay", ratio: "16:9", accent: "#f472b6", bg: "#170d14", title: "Chapter Progress Bar", desc: "Sleek segmented timeline bar along the bottom edge showing current section title, percentage fill, and subtle milestone chimes." },
+      { id: "53", category: "Character Story", ratio: "9:16", accent: "#fb923c", bg: "#1a120c", title: "Minimalist Stickman Story", desc: "Expressive geometric stick-figure character acting out scenarios: bouncy limb physics, speech bubbles, props popping in, and comedic SFX." },
+      { id: "54", category: "Character Story", ratio: "16:9", accent: "#60a5fa", bg: "#0c121e", title: "Corporate Character Explainer", desc: "Clean geometric vector characters in modern workspace scenes: smooth walk cycles, floating idea lightbulbs, and friendly explainer pacing." },
+      { id: "55", category: "Character Story", ratio: "9:16", accent: "#a855f7", bg: "#140c1f", title: "Mascot Avatar Presenter", desc: "Animated geometric robot/mascot host in the corner reacting to charts and bullet points with expressive blinking eyes and waveform mouth." },
+      { id: "56", category: "Character Story", ratio: "16:9", accent: "#f43f5e", bg: "#180c0f", title: "Noir Silhouette Drama", desc: "High-contrast backlit silhouettes in moody rain or fog: dramatic venetian-blind shadows, single crimson accent, and cinematic pacing." },
+      { id: "57", category: "Talking Head", ratio: "16:9", accent: "#fbbf24", bg: "#14120e", title: "Studio Glass Callouts", desc: "Designed to layer over 16:9 webcam footage: frosted dark-glass bullet cards appearing beside the speaker with smooth blur-in and click audio." },
+      { id: "58", category: "Talking Head", ratio: "16:9", accent: "#34d399", bg: "#0b1612", title: "Split-Screen Whiteboard", desc: "Speaker framed on the left third while a clean animated diagram builds step-by-step on the right two-thirds in sync with speech." },
+      { id: "59", category: "Talking Head", ratio: "9:16", accent: "#38bdf8", bg: "#0b131b", title: "Podcast Clip Visualizer", desc: "Vertical podcast highlight template: top bold hook title, live reactive audio waveform bar, highlighted captions, and speaker badge." },
+      { id: "60", category: "Talking Head", ratio: "16:9", accent: "#f97316", bg: "#19110b", title: "Zoom-Punch & Highlight", desc: "Dynamic framing cuts with animated red/yellow marker circles and arrows pointing directly to on-screen details as you talk." },
+      { id: "61", category: "3D", ratio: "16:9", accent: "#fbbf24", bg: "#12110c", title: "Gold & Obsidian Luxury", desc: "High-end dark obsidian surfaces with brushed gold 3D bevels in Three.js: slow dramatic light sweep, reflection sheen, and deep cinematic bass." },
+      { id: "62", category: "Kinetic Type", ratio: "16:9", accent: "#22d3ee", bg: "#081318", title: "Neural Pulse Blueprint", desc: "Glowing cyan synaptic lines connecting crisp technical callouts: rapid data-stream particles, clean geometric frames, and futuristic UI chimes." }
+    ];
+
+    const categories = [
+      "All",
+      "Kinetic Type",
+      "3D",
+      "Hand-Drawn",
+      "Data",
+      "Shorts Format",
+      "Edit Overlay",
+      "Screen and UI",
+      "Retro",
+      "Illustrated",
+      "Character Story",
+      "Talking Head"
+    ];
+
+    let currentCategory = "All";
+    let searchQuery = "";
+    let activeStyle = null;
+    let modalMode = "topic"; // 'topic' | 'vo' | 'youtube'
+
+    // Toast notification helper
+    function showToast(message) {
+      const container = document.getElementById("toastContainer");
+      const toast = document.createElement("div");
+      toast.className = "pointer-events-auto glass border border-amber-400/50 text-white px-4 py-3 rounded-2xl shadow-2xl text-xs sm:text-sm font-bold flex items-center gap-2.5 transform transition-all duration-300 -translate-y-2 opacity-0";
+      toast.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 shrink-0"></span><span>${message}</span>`;
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove("-translate-y-2", "opacity-0");
+      });
+
+      setTimeout(() => {
+        toast.classList.add("-translate-y-2", "opacity-0");
+        setTimeout(() => toast.remove(), 300);
+      }, 2800);
+    }
+
+    // Reliable mobile + desktop clipboard copy
+    function copyText(text, successMessage = "Copied! Paste into Claude app.") {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      textarea.setSelectionRange(0, 99999);
+      try {
+        document.execCommand("copy");
+        showToast(successMessage);
+      } catch (err) {
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(text).then(() => showToast(successMessage));
+        }
+      }
+      document.body.removeChild(textarea);
+    }
+
+    // Lightweight CSS/SVG animated thumbnail
+    function getStylePreviewMarkup(style) {
+      const { id, category, accent, bg, title } = style;
+      const shortTitle = title.split(" ").slice(0, 2).join(" ").toUpperCase();
+
+      if (category === "3D") {
+        return `
+          <div class="w-full h-full relative flex items-center justify-center overflow-hidden" style="background: radial-gradient(circle at 50% 35%, ${accent}25, ${bg} 75%);">
+            <div class="anim-float w-14 h-14 rounded-2xl border-2 flex items-center justify-center shadow-lg" style="border-color: ${accent}; background: ${accent}18; transform: rotate(12deg);">
+              <div class="w-7 h-7 rounded-lg border" style="border-color: ${accent}; background: ${accent}40;"></div>
+            </div>
+            <span class="absolute bottom-2 left-3 mono text-[10px] opacity-80" style="color: ${accent};">3D // #${id}</span>
+          </div>
+        `;
+      }
+
+      if (category === "Data") {
+        return `
+          <div class="w-full h-full relative flex items-end justify-center gap-2 px-8 pb-5 pt-7 overflow-hidden" style="background: ${bg};">
+            <div class="w-3.5 rounded-t bg-zinc-700/60 h-8"></div>
+            <div class="w-3.5 rounded-t h-14" style="background: ${accent}80;"></div>
+            <div class="w-3.5 rounded-t h-20 anim-slam" style="background: ${accent};"></div>
+            <div class="w-3.5 rounded-t bg-zinc-700/60 h-11"></div>
+            <div class="w-3.5 rounded-t h-16" style="background: ${accent}aa;"></div>
+            <span class="absolute top-2 left-3 mono text-[10px] text-zinc-400">DATA // +148%</span>
+          </div>
+        `;
+      }
+
+      if (category === "Hand-Drawn") {
+        return `
+          <div class="w-full h-full relative flex flex-col items-center justify-center p-4 overflow-hidden" style="background: ${bg};">
+            <svg class="w-32 h-14 anim-float" viewBox="0 0 160 70" fill="none">
+              <path d="M12 45 Q 45 15, 80 42 T 148 28" stroke="${accent}" stroke-width="3" stroke-linecap="round" stroke-dasharray="4 3"/>
+              <circle cx="80" cy="42" r="6" stroke="#fff" stroke-width="2"/>
+            </svg>
+            <span class="mono text-[10px] tracking-widest uppercase" style="color: ${accent};">${shortTitle}</span>
+          </div>
+        `;
+      }
+
+      if (category === "Retro") {
+        return `
+          <div class="w-full h-full relative flex items-center justify-center overflow-hidden" style="background: ${bg};">
+            <div class="absolute inset-0 opacity-20" style="background: repeating-linear-gradient(0deg, transparent, transparent 3px, ${accent}44 4px);"></div>
+            <div class="scan-bar absolute inset-x-0 h-5 opacity-20" style="background: ${accent};"></div>
+            <div class="px-3 py-1 border mono text-xs font-bold tracking-widest" style="border-color: ${accent}; color: ${accent};">
+              REC ● ${id}:00
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="w-full h-full relative flex flex-col items-center justify-center p-4 overflow-hidden" style="background: radial-gradient(circle at 30% 30%, ${accent}22, ${bg} 75%);">
+          <div class="anim-grid absolute inset-0 opacity-20" style="background-image: radial-gradient(${accent} 1px, transparent 1px); background-size: 16px 16px;"></div>
+          <div class="relative z-10 text-center">
+            <div class="text-base sm:text-lg font-black tracking-tight text-white anim-slam">${shortTitle}</div>
+            <div class="h-1 w-12 mx-auto mt-1.5 rounded-full" style="background: ${accent};"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Horizontal Scrollable Category Filter Pills
+    function renderFilters() {
+      const container = document.getElementById("filterContainer");
+      container.innerHTML = "";
+      categories.forEach(cat => {
+        const count = cat === "All" ? stylesData.length : stylesData.filter(s => s.category === cat).length;
+        const isActive = currentCategory === cat;
+        const btn = document.createElement("button");
+        btn.onclick = () => {
+          currentCategory = cat;
+          renderFilters();
+          renderStyles();
+        };
+        btn.className = isActive
+          ? "shrink-0 px-4 py-2 rounded-full bg-amber-400 text-black text-xs font-extrabold transition min-h-[38px]"
+          : "shrink-0 px-4 py-2 rounded-full bg-zinc-900 text-zinc-300 border border-zinc-800 hover:border-zinc-600 text-xs font-semibold transition min-h-[38px]";
+        btn.innerHTML = `${cat} <span class="opacity-65">(${count})</span>`;
+        container.appendChild(btn);
+      });
+    }
+
+    // Render Style Cards
+    function renderStyles() {
+      const grid = document.getElementById("stylesGrid");
+      const emptyState = document.getElementById("emptyState");
+      const badge = document.getElementById("styleCountBadge");
+
+      const filtered = stylesData.filter(style => {
+        const matchesCategory = currentCategory === "All" || style.category === currentCategory;
+        const q = searchQuery.toLowerCase();
+        const matchesSearch =
+          !q ||
+          style.title.toLowerCase().includes(q) ||
+          style.desc.toLowerCase().includes(q) ||
+          style.category.toLowerCase().includes(q) ||
+          style.id.includes(q);
+        return matchesCategory && matchesSearch;
+      });
+
+      badge.textContent = `${filtered.length}`;
+      grid.innerHTML = "";
+
+      if (filtered.length === 0) {
+        emptyState.classList.remove("hidden");
+        return;
+      } else {
+        emptyState.classList.add("hidden");
+      }
+
+      filtered.forEach(style => {
+        const card = document.createElement("div");
+        card.className = "glass-card rounded-3xl p-4 sm:p-5 flex flex-col justify-between";
+        card.innerHTML = `
+          <div>
+            <div class="aspect-video rounded-2xl mb-3.5 border border-zinc-800/90 relative overflow-hidden cursor-pointer" onclick='openModalById("${style.id}")'>
+              ${getStylePreviewMarkup(style)}
+              <span class="absolute top-2 right-2 bg-black/75 border border-white/10 px-2 py-0.5 rounded-md text-[10px] mono text-zinc-300">
+                ${style.ratio}
+              </span>
+            </div>
+
+            <div class="text-xs mono text-amber-400 font-bold mb-1">
+              #${style.id} · ${style.category}
+            </div>
+            <h3 class="text-lg font-extrabold text-white mb-1.5 tracking-tight">${style.title}</h3>
+            <p class="text-zinc-400 text-xs leading-relaxed mb-4 line-clamp-3">${style.desc}</p>
+          </div>
+
+          <button onclick='openModalById("${style.id}")' class="w-full py-3 px-4 rounded-xl bg-zinc-800 hover:bg-amber-400 hover:text-black text-white text-xs sm:text-sm font-extrabold transition min-h-[46px]">
+            Get Prompt
+          </button>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function handleSearch() {
+      searchQuery = document.getElementById("styleSearchInput").value;
+      renderStyles();
+    }
+
+    function resetFilters() {
+      currentCategory = "All";
+      searchQuery = "";
+      document.getElementById("styleSearchInput").value = "";
+      renderFilters();
+      renderStyles();
+    }
+
+    // Populate Dropdowns (YouTube Mobile Bridge + Clone Section)
+    function initDropdowns() {
+      const ytSelect = document.getElementById("ytStyleSelect");
+      const cloneSelect = document.getElementById("cloneStyleSelect");
+      ytSelect.innerHTML = "";
+      cloneSelect.innerHTML = "";
+
+      stylesData.forEach(s => {
+        const label = `#${s.id} — ${s.title} (${s.ratio})`;
+        const opt1 = document.createElement("option");
+        opt1.value = s.id;
+        opt1.textContent = label;
+        ytSelect.appendChild(opt1);
+
+        const opt2 = document.createElement("option");
+        opt2.value = s.id;
+        opt2.textContent = label;
+        cloneSelect.appendChild(opt2);
+      });
+
+      updateYoutubePrompt();
+      updateClonePrompt();
+    }
+
+    // Mobile YouTube -> Claude Prompt Generator
+    function updateYoutubePrompt() {
+      const id = document.getElementById("ytStyleSelect").value;
+      const style = stylesData.find(s => s.id === id) || stylesData[0];
+      const url = document.getElementById("ytUrlInput").value.trim() || "[PASTE YOUTUBE URL HERE]";
+      const notes = document.getElementById("ytNotesInput").value.trim();
+
+      const sourceInstruction = notes
+        ? `YouTube Reference URL: ${url}\nVideo Key Points / Transcript:\n${notes}\n\nUse the key points above (and search the web for additional context on this YouTube video URL if needed) to structure the script.`
+        : `YouTube Reference URL: ${url}\n\nNote: Since I am using the Claude mobile app, please use your web search tool to look up the title, summary, and key takeaways of this YouTube video URL first. (If the video is private or unindexed, ask me to paste its transcript/summary).`;
+
+      const prompt = `Create an animated motion-graphics video in Vixit 3D Style #${style.id}: "${style.title}" (${style.ratio}).
+
+${sourceInstruction}
+
+Visual & Motion Style:
+${style.desc}
+
+Audio: Include a complete synthesized Web Audio API sound mix (transition whooshes, pops, and impacts).
+Workflow: Show me a test storyboard frame first and wait for my OK before building the full animation.`;
+
+      document.getElementById("ytPromptPreview").value = prompt;
+    }
+
+    function copyYoutubePrompt() {
+      const text = document.getElementById("ytPromptPreview").value;
+      copyText(text, "Mobile YouTube prompt copied! Open Claude app & paste.");
+      const btn = document.getElementById("copyYtBtn");
+      btn.textContent = "✓ Copied for Mobile!";
+      setTimeout(() => (btn.textContent = "Copy & Open Claude"), 2400);
+    }
+
+    // Clone Section Logic
+    function updateClonePrompt() {
+      const selectedId = document.getElementById("cloneStyleSelect").value;
+      const baseStyle = stylesData.find(s => s.id === selectedId) || stylesData[0];
+      const topic = document.getElementById("cloneTopicInput").value.trim() || "[YOUR TOPIC OR YOUTUBE LINK]";
+
+      const prompt = `Clone the visual style from the attached screenshot(s), using the animation engine of Vixit 3D Style #${baseStyle.id}: "${baseStyle.title}" (${baseStyle.ratio}).
+
+Base Engine: ${baseStyle.desc}
+Topic / Content: ${topic}
+
+Instructions:
+1. Match the exact colors, typography, layout, and motion physics from my screenshot(s) + add synthesized Web Audio SFX.
+2. Explain how the animation engine works and show me 1 test frame first.
+3. Wait for my OK before building the full video.`;
+
+      document.getElementById("clonePromptPreview").value = prompt;
+    }
+
+    function copyClonePrompt() {
+      const text = document.getElementById("clonePromptPreview").value;
+      copyText(text, "Clone prompt copied! Paste in Claude & attach 1–3 screenshots.");
+      const btn = document.getElementById("copyCloneBtn");
+      btn.textContent = "✓ Copied!";
+      setTimeout(() => (btn.textContent = "Copy Clone Prompt"), 2200);
+    }
+
+    function quickCloneFromCard(styleId) {
+      document.getElementById("cloneStyleSelect").value = styleId;
+      updateClonePrompt();
+      document.getElementById("clone").scrollIntoView({ behavior: "smooth" });
+      showToast(`Loaded #${styleId} into Style Cloner`);
+    }
+
+    // Mobile Bottom Sheet / Modal Logic
+    function openModalById(styleId) {
+      const style = stylesData.find(s => s.id === styleId);
+      if (!style) return;
+      activeStyle = style;
+      document.getElementById("modalTag").textContent = `#${style.id} · ${style.category.toUpperCase()} · ${style.ratio}`;
+      document.getElementById("modalTitle").textContent = style.title;
+      document.getElementById("modalDesc").textContent = style.desc;
+      document.getElementById("modalTopic").value = "";
+      document.getElementById("modalYtUrl").value = "";
+      setModalMode("topic");
+      document.getElementById("promptModal").classList.remove("hidden");
+    }
+
+    function closeModal() {
+      document.getElementById("promptModal").classList.add("hidden");
+    }
+
+    function setModalMode(mode) {
+      modalMode = mode;
+      const btnTopic = document.getElementById("modeTopicBtn");
+      const btnVo = document.getElementById("modeVoBtn");
+      const btnYt = document.getElementById("modeYtBtn");
+      const ytWrap = document.getElementById("modalYtUrlWrap");
+      const label = document.getElementById("modalInputLabel");
+      const input = document.getElementById("modalTopic");
+
+      btnTopic.className = "py-2 px-2 rounded-lg text-[11px] sm:text-xs font-bold text-zinc-400 hover:text-white transition";
+      btnVo.className = "py-2 px-2 rounded-lg text-[11px] sm:text-xs font-bold text-zinc-400 hover:text-white transition";
+      btnYt.className = "py-2 px-2 rounded-lg text-[11px] sm:text-xs font-bold text-emerald-400 hover:text-emerald-300 transition";
+      ytWrap.classList.add("hidden");
+
+      if (mode === "topic") {
+        btnTopic.className = "py-2 px-2 rounded-lg text-[11px] sm:text-xs font-extrabold bg-amber-400 text-black transition";
+        label.textContent = "Your topic or key points";
+        input.placeholder = "e.g., How compounding works when you start at age 20...";
+      } else if (mode === "vo") {
+        btnVo.className = "py-2 px-2 rounded-lg text-[11px] sm:text-xs font-extrabold bg-amber-400 text-black transition";
+        label.textContent = "Your voiceover script or timestamps";
+        input.placeholder = "e.g., 0:00 Hook line | 0:04 Stat | 0:10 Takeaway...";
+      } else if (mode === "youtube") {
+        btnYt.className = "py-2 px-2 rounded-lg text-[11px] sm:text-xs font-extrabold bg-emerald-400 text-black transition";
+        ytWrap.classList.remove("hidden");
+        label.textContent = "Optional video notes or transcript (helps on mobile)";
+        input.placeholder = "Paste main takeaways from the YouTube video...";
+      }
+      updateModalPrompt();
+    }
+
+    function updateModalPrompt() {
+      if (!activeStyle) return;
+      const mainInput = document.getElementById("modalTopic").value.trim();
+      const ytUrl = document.getElementById("modalYtUrl").value.trim() || "[PASTE YOUTUBE URL]";
+
+      let contentBlock = "";
+      let audioBlock = "Include a complete synthesized Web Audio API sound mix (whooshes, pops, and impacts).";
+
+      if (modalMode === "topic") {
+        contentBlock = `Topic / Key Points:\n${mainInput || "[INSERT YOUR TOPIC HERE]"}`;
+      } else if (modalMode === "vo") {
+        contentBlock = `Voiceover Script / Timestamps:\n${mainInput || "[INSERT YOUR SCRIPT HERE]"}`;
+        audioBlock = "Sync every visual beat strictly to my voiceover timestamps with subtle Web Audio SFX underneath.";
+      } else if (modalMode === "youtube") {
+        contentBlock = `YouTube Video Link: ${ytUrl}\n${
+          mainInput
+            ? `Video Notes / Transcript:\n${mainInput}`
+            : `Mobile Instruction: Use web search to look up the title and summary of this YouTube link first (or ask me to paste its key points if unavailable).`
+        }`;
+      }
+
+      const prompt = `Build an animated motion-graphics video in Vixit 3D Style #${activeStyle.id}: "${activeStyle.title}" (${activeStyle.ratio}).
+
+Visual Direction:
+${activeStyle.desc}
+
+${contentBlock}
+
+Audio: ${audioBlock}
+Workflow: Render a test storyboard frame first and wait for my OK before building the full animation.`;
+
+      document.getElementById("modalPromptText").value = prompt;
+    }
+
+    function copyModalPrompt() {
+      const text = document.getElementById("modalPromptText").value;
+      copyText(text, `Copied "${activeStyle.title}" prompt! Paste into Claude app.`);
+      const btn = document.getElementById("copyModalBtn");
+      btn.textContent = "✓ Copied! Open Claude App";
+      setTimeout(() => (btn.textContent = "Copy Prompt for Claude"), 2400);
+    }
+
+    function useInCloner() {
+      if (!activeStyle) return;
+      const id = activeStyle.id;
+      closeModal();
+      quickCloneFromCard(id);
+    }
+
+    // Mobile vs Desktop Skill Tabs
+    function switchSkillMode(mode) {
+      const mBtn = document.getElementById("tabSkillMobile");
+      const dBtn = document.getElementById("tabSkillDesktop");
+      const s1m = document.getElementById("skill1MobileBox");
+      const s1d = document.getElementById("skill1DesktopBox");
+      const s2m = document.getElementById("skill2MobileBox");
+      const s2d = document.getElementById("skill2DesktopBox");
+
+      if (mode === "mobile") {
+        mBtn.className = "px-3.5 py-2 rounded-lg text-xs font-extrabold bg-amber-400 text-black transition";
+        dBtn.className = "px-3.5 py-2 rounded-lg text-xs font-bold text-zinc-400 hover:text-white transition";
+        s1m.classList.remove("hidden");
+        s2m.classList.remove("hidden");
+        s1d.classList.add("hidden");
+        s2d.classList.add("hidden");
+      } else {
+        dBtn.className = "px-3.5 py-2 rounded-lg text-xs font-extrabold bg-amber-400 text-black transition";
+        mBtn.className = "px-3.5 py-2 rounded-lg text-xs font-bold text-zinc-400 hover:text-white transition";
+        s1d.classList.remove("hidden");
+        s2d.classList.remove("hidden");
+        s1m.classList.add("hidden");
+        s2m.classList.add("hidden");
+      }
+    }
+
+    // Download Skill Kit Handler
+    function triggerSkillDownload(skillName, fileName, size) {
+      const readmeContent = `# ${skillName} — Vixit 3D
+Contact: nagarvikas456@gmail.com
+
+## Mobile App Usage (No Installation Needed)
+Paste the Mobile Prompt from Vixit 3D directly into the Claude iOS/Android app.
+
+## Desktop Claude Code Setup
+1. Place skill folder inside: ~/.claude/skills/
+2. Run setup: bash scripts/setup.sh
+`;
+      const blob = new Blob([readmeContent], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = fileName.replace(".zip", "-vixit3d-guide.txt");
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast(`Downloaded ${skillName} (${size}) guide!`);
+    }
+
+    // Newsletter Submit
+    function handleNewsletterSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById("newsletterEmailInput").value.trim();
+      if (!email) return;
+      localStorage.setItem("vixit3d_subscribed", email);
+      document.getElementById("newsletterEmailInput").value = "";
+      showToast(`Subscribed ${email} to Vixit 3D's AI Brief!`);
+    }
+
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") closeModal();
+    });
+
+    // Initialize
+    renderFilters();
+    renderStyles();
+    initDropdowns();
+  </script>
+</body>
+</html>
